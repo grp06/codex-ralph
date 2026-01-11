@@ -1,7 +1,0 @@
-[0;34m[INFO][0m Logging to .ralph/logs/afk-ralph-20260111-110137.log
-[0;36m[STEP][0m Ralph iteration 1
-[0;34m[INFO][0m Plan: EXECPLAN.md
-[0;34m[INFO][0m Rules: .agent/PLANS.md
-[0;34m[INFO][0m Schema: ralph.schema.json
-[0;34m[INFO][0m Output: ./.ralph/last.json
-Not inside a trusted directory and --skip-git-repo-check was not specified.
