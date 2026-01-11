@@ -21,6 +21,7 @@ The loop stops when Progress is fully complete or when blocked (status `BLOCKED`
 - `ralph.schema.json`: JSON schema for structured loop output.
 - `afk-ralph.sh`: Run multiple iterations (unattended).
 - `ralph-project.sh`: Run the loop against an external project.
+- `ralph.config.toml`: Default Codex settings for the loop.
 - `docker/init.sh`: Build image, install Codex CLI, authenticate.
 - `docker/run.sh`: Run a command inside the container.
 - `docker/codex-setup.sh`: Install Codex CLI and prompt for login.
@@ -61,6 +62,7 @@ To open a shell in the container:
 ```
 
 Auth is stored in `./.ralph/home/.codex/` inside the repo.
+Default Codex settings for the loop live in `ralph.config.toml`.
 
 ## Run on another project (keeps this repo stable)
 This repo can run the loop against a separate target repo without adding Ralph files to that target.

@@ -71,6 +71,7 @@ docker compose run --rm \
   -e RALPH_LOG_DIR="/workspace/runs/$project_name/.ralph/logs" \
   -e RALPH_RUN_DIR="/workspace/runs/$project_name" \
   -e RALPH_TARGET_DIR="/work" \
+  -e RALPH_CONFIG="/workspace/ralph.config.toml" \
   -v "$project_abs:/work" \
   -w /work \
   ralph \

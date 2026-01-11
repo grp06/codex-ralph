@@ -42,6 +42,28 @@ OUTPUT_PATH="${RALPH_OUTPUT:-./.ralph/last.json}"
 RUN_DIR="${RALPH_RUN_DIR:-$PWD}"
 LOG_DIR="${RALPH_LOG_DIR:-$RUN_DIR/.ralph/logs}"
 TARGET_DIR="${RALPH_TARGET_DIR:-$PWD}"
+CONFIG_PATH="${RALPH_CONFIG:-$PWD/ralph.config.toml}"
+
+if [[ -n "${RALPH_CONFIG:-}" && ! -f "$CONFIG_PATH" ]]; then
+  log_error "Missing config: $CONFIG_PATH"
+  exit 1
+fi
+
+REASONING_EFFORT="medium"
+if [[ -f "$CONFIG_PATH" ]]; then
+  parsed_effort="$(awk -F= '/^[[:space:]]*model_reasoning_effort[[:space:]]*=/{print $2; exit}' "$CONFIG_PATH" | tr -d ' \"')"
+  if [[ -n "$parsed_effort" ]]; then
+    REASONING_EFFORT="$parsed_effort"
+  fi
+fi
+
+case "$REASONING_EFFORT" in
+  minimal|low|medium|high|xhigh) ;;
+  *)
+    log_error "Invalid model_reasoning_effort: $REASONING_EFFORT (expected minimal|low|medium|high|xhigh)"
+    exit 1
+    ;;
+esac
 
 if [[ ! -f "$PLAN_PATH" ]]; then
   log_error "Missing plan: $PLAN_PATH"
@@ -107,6 +129,7 @@ for ((i=1; ; i++)); do
     --model gpt-5.2-codex \
     --sandbox danger-full-access \
     -c 'shell_environment_policy.include_only=["PATH","HOME","TERM","SSH_AUTH_SOCK","XDG_CACHE_HOME","PNPM_STORE_DIR","PNPM_CACHE_DIR","PNPM_HOME","NPM_CONFIG_CACHE"]' \
+    -c "model_reasoning_effort=\"$REASONING_EFFORT\"" \
     -c 'approval_policy="never"' \
     --output-schema "$SCHEMA_PATH" \
     -o "$OUTPUT_PATH" \
