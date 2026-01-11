@@ -89,11 +89,6 @@ fi
 mkdir -p "$RUN_DIR/.ralph/logs"
 mkdir -p "$LOG_DIR"
 mkdir -p "$RUN_DIR/.ralph/pnpm-cache" "$RUN_DIR/.ralph/pnpm-store" "$RUN_DIR/.ralph/pnpm-home" "$RUN_DIR/.ralph/cache"
-timestamp="$(date +%Y%m%d-%H%M%S)"
-log_file="$LOG_DIR/afk-ralph-$timestamp.log"
-exec > >(tee -a "$log_file") 2>&1
-
-log_info "Logging to $log_file"
 
 export XDG_CACHE_HOME="$RUN_DIR/.ralph/cache"
 export PNPM_STORE_DIR="$RUN_DIR/.ralph/pnpm-store"
@@ -114,7 +109,14 @@ progress_remaining() {
 
 cd "$TARGET_DIR"
 
+exec 3>&1 4>&2
+restore_io() { exec 1>&3 2>&4; }
+
 for ((i=1; ; i++)); do
+  timestamp="$(date +%Y%m%d-%H%M%S)"
+  log_file="$LOG_DIR/afk-ralph-$timestamp-iter-$i.log"
+  exec > >(tee -a "$log_file") 2>&1
+  log_info "Logging to $log_file"
   if [[ "$iters" == "forever" ]]; then
     log_step "Ralph iteration $i"
   else
@@ -153,6 +155,7 @@ PROMPT
   remaining="$(progress_remaining)"
   if [[ "$remaining" -eq 0 ]]; then
     log_success "Progress complete after $i iterations."
+    restore_io
     exit 0
   fi
 
@@ -162,12 +165,16 @@ PROMPT
 
   if [[ "$status" == "BLOCKED" ]]; then
     log_warn "Blocked on iteration $i. See $OUTPUT_PATH"
+    restore_io
     exit 2
   fi
 
   if [[ "$iters" != "forever" && "$i" -ge "$iters" ]]; then
+    restore_io
     break
   fi
+
+  restore_io
 done
 
 if [[ "$iters" == "forever" ]]; then
