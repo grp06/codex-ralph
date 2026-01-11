@@ -182,68 +182,7 @@ echo ".ralph/" >> .gitignore
 
 ---
 
-## 5. Create `ralph-once.sh` (one iteration)
-
-This is your “watch it work once” script.
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-mkdir -p .ralph
-
-codex exec \
-  --model gpt-5.2-codex \
-  --sandbox danger-full-access \
-  -c 'approval_policy="on-request"' \
-  --output-schema ./ralph.schema.json \
-  -o ./.ralph/last.json \
-  - <<'PROMPT'
-You are running a Ralph loop iteration.
-
-Read these files:
-- .agent/PLANS.md (ExecPlan rules)
-- EXECPLAN.md (the plan you must follow)
-
-Do EXACTLY ONE unit of work:
-1) Find the next unchecked item in EXECPLAN.md > Progress.
-   - If it’s too big, split it into smaller items and complete only the first new item.
-2) Implement the change.
-3) Run the Validation commands listed in EXECPLAN.md.
-4) Make exactly one git commit with a clear message.
-5) Update EXECPLAN.md:
-   - Check the Progress item you completed (add date/timestamp in the checkbox line).
-   - Update Surprises & Discoveries / Decision Log if relevant.
-
-If all Progress items are complete, do not change code; just return status COMPLETE.
-
-Return ONLY a JSON object matching the output schema.
-PROMPT
-
-cat ./.ralph/last.json
-```
-
-Notes (these are practical, not philosophy):
-
-* `codex exec` accepts the prompt from stdin when you pass `-` as the PROMPT. ([OpenAI Developers][4])
-* `-o` writes the final message to a file (and still prints to stdout). ([OpenAI Developers][1])
-* `gpt-5.2-codex` is the recommended top-end Codex model, and you can override via `--model/-m`. ([OpenAI Developers][6])
-
-Make it executable:
-
-```bash
-chmod +x ralph-once.sh
-```
-
-Run:
-
-```bash
-./ralph-once.sh
-```
-
----
-
-## 6. Create `afk-ralph.sh` (loop until Progress is complete)
+## 5. Create `afk-ralph.sh` (loop until Progress is complete)
 
 This is your unattended runner.
 
@@ -330,10 +269,10 @@ Make it executable:
 chmod +x afk-ralph.sh
 ```
 
-Run:
+Run a single iteration:
 
 ```bash
-./afk-ralph.sh 20
+./afk-ralph.sh 1
 ```
 
 Or omit the cap and run until Progress is complete:
@@ -346,7 +285,7 @@ Why the cap exists: without it, “agent loop” + “no approvals” is how you
 
 ---
 
-## 7. Reality check: where Ralph loops actually fail
+## 6. Reality check: where Ralph loops actually fail
 
 If your plan is vague, Codex will “do work” that isn’t converging. ExecPlans are heavy for a reason: they force you to define **validation**, **concrete steps**, and a **clear end state**. ([OpenAI Cookbook][2])
 
@@ -358,7 +297,7 @@ Typical failure modes:
 
 ---
 
-## 8. Make it your own (Codex-native variants)
+## 7. Make it your own (Codex-native variants)
 
 A few Codex-specific upgrades:
 

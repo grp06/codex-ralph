@@ -35,25 +35,49 @@ log_success() { printf "%b[OK]%b %s\n" "$C_GREEN" "$C_RESET" "$*"; }
 log_warn() { printf "%b[WARN]%b %s\n" "$C_YELLOW" "$C_RESET" "$*"; }
 log_error() { printf "%b[ERR]%b %s\n" "$C_RED" "$C_RESET" "$*"; }
 
+PLAN_PATH="${RALPH_PLAN:-EXECPLAN.md}"
+RULES_PATH="${RALPH_RULES:-.agent/PLANS.md}"
+SCHEMA_PATH="${RALPH_SCHEMA:-ralph.schema.json}"
+OUTPUT_PATH="${RALPH_OUTPUT:-./.ralph/last.json}"
+RUN_DIR="${RALPH_RUN_DIR:-$PWD}"
+LOG_DIR="${RALPH_LOG_DIR:-$RUN_DIR/.ralph/logs}"
+TARGET_DIR="${RALPH_TARGET_DIR:-$PWD}"
+
+if [[ ! -f "$PLAN_PATH" ]]; then
+  log_error "Missing plan: $PLAN_PATH"
+  exit 1
+fi
+
+if [[ ! -f "$RULES_PATH" ]]; then
+  log_error "Missing rules: $RULES_PATH"
+  exit 1
+fi
+
+if [[ ! -f "$SCHEMA_PATH" ]]; then
+  log_error "Missing schema: $SCHEMA_PATH"
+  exit 1
+fi
+
 iters="${1:-}"
 if [[ -z "$iters" ]]; then
   iters="forever"
   log_warn "No iteration cap set; will run until COMPLETE or BLOCKED."
 fi
 
-mkdir -p .ralph/logs
-mkdir -p .ralph/pnpm-cache .ralph/pnpm-store .ralph/pnpm-home .ralph/cache
+mkdir -p "$RUN_DIR/.ralph/logs"
+mkdir -p "$LOG_DIR"
+mkdir -p "$RUN_DIR/.ralph/pnpm-cache" "$RUN_DIR/.ralph/pnpm-store" "$RUN_DIR/.ralph/pnpm-home" "$RUN_DIR/.ralph/cache"
 timestamp="$(date +%Y%m%d-%H%M%S)"
-log_file=".ralph/logs/afk-ralph-$timestamp.log"
+log_file="$LOG_DIR/afk-ralph-$timestamp.log"
 exec > >(tee -a "$log_file") 2>&1
 
 log_info "Logging to $log_file"
 
-export XDG_CACHE_HOME="$PWD/.ralph/cache"
-export PNPM_STORE_DIR="$PWD/.ralph/pnpm-store"
-export PNPM_CACHE_DIR="$PWD/.ralph/pnpm-cache"
-export PNPM_HOME="$PWD/.ralph/pnpm-home"
-export NPM_CONFIG_CACHE="$PWD/.ralph/pnpm-cache"
+export XDG_CACHE_HOME="$RUN_DIR/.ralph/cache"
+export PNPM_STORE_DIR="$RUN_DIR/.ralph/pnpm-store"
+export PNPM_CACHE_DIR="$RUN_DIR/.ralph/pnpm-cache"
+export PNPM_HOME="$RUN_DIR/.ralph/pnpm-home"
+export NPM_CONFIG_CACHE="$RUN_DIR/.ralph/pnpm-cache"
 
 progress_remaining() {
   awk '
@@ -63,8 +87,10 @@ progress_remaining() {
       if (in_progress && $0 ~ /^- \[ \]/) count++
     }
     END { print count + 0 }
-  ' EXECPLAN.md
+  ' "$PLAN_PATH"
 }
+
+cd "$TARGET_DIR"
 
 for ((i=1; ; i++)); do
   if [[ "$iters" == "forever" ]]; then
@@ -72,31 +98,33 @@ for ((i=1; ; i++)); do
   else
     log_step "Ralph iteration $i/$iters"
   fi
-  log_info "Plan: EXECPLAN.md"
-  log_info "Rules: .agent/PLANS.md"
-  log_info "Schema: ralph.schema.json"
-  log_info "Output: ./.ralph/last.json"
+  log_info "Plan: $PLAN_PATH"
+  log_info "Rules: $RULES_PATH"
+  log_info "Schema: $SCHEMA_PATH"
+  log_info "Output: $OUTPUT_PATH"
 
   codex exec \
     --model gpt-5.2-codex \
     --sandbox danger-full-access \
     -c 'shell_environment_policy.include_only=["PATH","HOME","TERM","SSH_AUTH_SOCK","XDG_CACHE_HOME","PNPM_STORE_DIR","PNPM_CACHE_DIR","PNPM_HOME","NPM_CONFIG_CACHE"]' \
     -c 'approval_policy="never"' \
-    --output-schema ./ralph.schema.json \
-    -o ./.ralph/last.json \
-    - <<'PROMPT'
+    --output-schema "$SCHEMA_PATH" \
+    -o "$OUTPUT_PATH" \
+    - <<PROMPT
 Ralph loop iteration.
 
-Read .agent/PLANS.md and EXECPLAN.md.
+Read these files:
+- $RULES_PATH
+- $PLAN_PATH
 Do exactly ONE unchecked Progress item (or split and do the first slice).
-Implement, validate, commit once, update EXECPLAN.md.
+Implement, validate, commit once, update the plan.
 
 Return ONLY JSON matching the output schema:
 - status = COMPLETE if Progress is fully done.
 - status = BLOCKED if you cannot proceed without human input.
 PROMPT
 
-  status="$(jq -r .status ./.ralph/last.json)"
+  status="$(jq -r .status "$OUTPUT_PATH")"
   log_info "status=$status"
 
   remaining="$(progress_remaining)"
@@ -110,7 +138,7 @@ PROMPT
   fi
 
   if [[ "$status" == "BLOCKED" ]]; then
-    log_warn "Blocked on iteration $i. See ./.ralph/last.json"
+    log_warn "Blocked on iteration $i. See $OUTPUT_PATH"
     exit 2
   fi
 

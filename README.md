@@ -19,11 +19,13 @@ The loop stops when Progress is fully complete or when blocked (status `BLOCKED`
 - `AGENTS.md`: Repo-level instructions for Codex.
 - `Dockerfile` + `docker-compose.yml`: Container runtime for the loop.
 - `ralph.schema.json`: JSON schema for structured loop output.
-- `ralph-once.sh`: Run one iteration (human-in-the-loop).
 - `afk-ralph.sh`: Run multiple iterations (unattended).
+- `ralph-project.sh`: Run the loop against an external project.
 - `docker/init.sh`: Build image, install Codex CLI, authenticate.
 - `docker/run.sh`: Run a command inside the container.
 - `docker/codex-setup.sh`: Install Codex CLI and prompt for login.
+- `templates/EXECPLAN.md`: Template for new project plans.
+- `runs/`: Per-project plans, logs, and outputs.
 - `.ralph/last.json`: Last structured output (ignored by git).
 
 ## Requirements
@@ -43,7 +45,7 @@ You will be prompted to choose ChatGPT login, device login, or API key auth.
 2) Run one iteration:
 
 ```bash
-./ralph-once.sh
+./afk-ralph.sh 1
 ```
 
 3) For unattended runs (cap iterations or omit to run until Progress is complete):
@@ -60,12 +62,32 @@ To open a shell in the container:
 
 Auth is stored in `./.ralph/home/.codex/` inside the repo.
 
+## Run on another project (keeps this repo stable)
+This repo can run the loop against a separate target repo without adding Ralph files to that target.
+
+1) Run once:
+
+```bash
+./ralph-project.sh /path/to/project 1
+```
+
+2) Run unattended:
+
+```bash
+./ralph-project.sh /path/to/project 20
+```
+
+The first run creates `runs/<project>/EXECPLAN.md` from the template and exits so you can edit it.
+Subsequent runs use that plan and write logs/output under `runs/<project>/.ralph/`.
+Set `RALPH_PROJECT_NAME` to override the default project name (basename of the path).
+Edit the plan before running if this is a new project.
+
 ## Quick start
 1) Write your plan in `EXECPLAN.md` (fill in Purpose, Progress, Validation, etc.).
 2) Run one iteration:
 
 ```bash
-./ralph-once.sh
+./afk-ralph.sh 1
 ```
 
 3) For unattended runs (cap iterations or omit to run until Progress is complete):
