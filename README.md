@@ -17,16 +17,48 @@ The loop stops when Progress is fully complete or when blocked (status `BLOCKED`
 - `EXECPLAN.md`: The living plan and single source of truth.
 - `.agent/PLANS.md`: Rules and template for writing ExecPlans.
 - `AGENTS.md`: Repo-level instructions for Codex.
+- `Dockerfile` + `docker-compose.yml`: Container runtime for the loop.
 - `ralph.schema.json`: JSON schema for structured loop output.
 - `ralph-once.sh`: Run one iteration (human-in-the-loop).
 - `afk-ralph.sh`: Run multiple iterations (unattended).
+- `docker/init.sh`: Build image, install Codex CLI, authenticate.
+- `docker/run.sh`: Run a command inside the container.
+- `docker/codex-setup.sh`: Install Codex CLI and prompt for login.
 - `.ralph/last.json`: Last structured output (ignored by git).
 
 ## Requirements
-- OpenAI Codex CLI installed and authenticated (`codex`).
+- Docker + Docker Compose v2.
 - `git` initialized (each iteration commits).
-- `jq` installed (used by `afk-ralph.sh`).
 - The loop scripts run Codex with `--sandbox danger-full-access` so the agent can commit (run only in a trusted environment).
+
+## Docker setup
+1) Build the image, install Codex CLI, and authenticate:
+
+```bash
+./docker/init.sh
+```
+
+You will be prompted to choose ChatGPT login, device login, or API key auth.
+
+2) Run one iteration:
+
+```bash
+./ralph-once.sh
+```
+
+3) For unattended runs (cap iterations or omit to run until Progress is complete):
+
+```bash
+./afk-ralph.sh 20
+```
+
+To open a shell in the container:
+
+```bash
+./docker/run.sh bash
+```
+
+Auth is stored in `./.ralph/home/.codex/` inside the repo.
 
 ## Quick start
 1) Write your plan in `EXECPLAN.md` (fill in Purpose, Progress, Validation, etc.).

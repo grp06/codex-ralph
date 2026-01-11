@@ -1,0 +1,14 @@
+services:
+  ralph:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+    environment:
+      - HOME=/workspace/.ralph/home
+      - CODEX_HOME=/workspace/.ralph/home/.codex
+      - RALPH_IN_DOCKER=1
+    tty: true
+    stdin_open: true

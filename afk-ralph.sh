@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -z "${RALPH_IN_DOCKER:-}" ]]; then
+  ./docker/run.sh ./afk-ralph.sh "$@"
+  exit $?
+fi
+
 is_tty=0
 if [[ -t 1 ]]; then
   is_tty=1
