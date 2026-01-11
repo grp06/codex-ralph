@@ -9,7 +9,7 @@ Users experience faster, smoother typing with fewer dropped frames or lag, visib
 
 ## Progress
 - [x] (2026-01-11) Audit repo and runtime behavior to identify performance bottlenecks and typing UX issues; capture baseline metrics and pain points.
-- [ ] (2026-01-11) Draft a concrete improvement plan in this ExecPlan, including a checklist of specific fixes and tests to add.
+- [x] (2026-01-11) Draft a concrete improvement plan in this ExecPlan, including a checklist of specific fixes and tests to add.
 - [ ] (2026-01-11) Implement the highest-impact performance/typing fixes and add/expand tests per the checklist.
 - [ ] (2026-01-11) Validate improvements with profiling + test suite; record results and update Outcomes & Retrospective.
 
@@ -50,9 +50,14 @@ Audit findings:
 6) Re-measure performance and finalize documentation in this ExecPlan.
 
 ## Checklist (to be filled after audit)
-- [ ] Performance: ...
-- [ ] Typing UX: ...
-- [ ] Tests: ...
+- [ ] Performance: Memoize `passageCharacters` and other derived render data to avoid recomputing on each keystroke.
+- [ ] Performance: Replace 250ms timer `now` re-render cadence with RAF or time diff computed only when needed (or pause when idle).
+- [ ] Performance: Minimize per-keystroke state updates (batch keystrokes/typed text updates or move counters to refs with a debounced commit).
+- [ ] Typing UX: Handle composition events (IME) to avoid incorrect keystroke counts and ensure smooth input.
+- [ ] Typing UX: Prevent focus loss/selection jumps when rendering spans or input updates during typing.
+- [ ] Tests: Add unit tests for memoized passage rendering and keystroke batching behavior.
+- [ ] Tests: Add integration test for IME composition path (mocked) and verify counts/locking remain correct.
+- [ ] Tests: Add acceptance test for typing flow under sustained input to guard against dropped characters.
 
 ## Concrete Steps
 - Read key docs and entry points (README, app entry, input handling files).
