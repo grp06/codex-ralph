@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "status": { "type": "string", "enum": ["IN_PROGRESS", "COMPLETE", "BLOCKED"] },
+    "did": { "type": "string" },
+    "commit_sha": { "type": ["string", "null"] },
+    "next": { "type": ["string", "null"] },
+    "notes": { "type": "string" }
+  },
+  "required": ["status", "did", "commit_sha", "next", "notes"],
+  "additionalProperties": false
+}
