@@ -143,6 +143,7 @@ Read these files:
 - $PLAN_PATH
 Do exactly ONE unchecked Progress item (or split and do the first slice).
 Implement, validate, commit once, update the plan.
+Use the target repo at $TARGET_DIR for all code changes and git commands.
 
 Return ONLY JSON matching the output schema:
 - status = COMPLETE if Progress is fully done.

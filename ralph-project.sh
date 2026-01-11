@@ -65,7 +65,7 @@ fi
 docker compose run --rm \
   -e RALPH_IN_DOCKER=1 \
   -e RALPH_PLAN="/workspace/runs/$project_name/EXECPLAN.md" \
-  -e RALPH_RULES="/workspace/.agent/PLANS.md" \
+  -e RALPH_RULES="/workspace/.agent/PLANS.external.md" \
   -e RALPH_SCHEMA="/workspace/ralph.schema.json" \
   -e RALPH_OUTPUT="/workspace/runs/$project_name/.ralph/last.json" \
   -e RALPH_LOG_DIR="/workspace/runs/$project_name/.ralph/logs" \

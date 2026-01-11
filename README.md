@@ -83,6 +83,7 @@ The first run creates `runs/<project>/EXECPLAN.md` from the template and exits s
 Subsequent runs use that plan and write logs/output under `runs/<project>/.ralph/`.
 Set `RALPH_PROJECT_NAME` to override the default project name (basename of the path).
 Edit the plan before running if this is a new project.
+All code changes and git commands run in the target repo.
 
 ## Quick start
 1) Write your plan in `EXECPLAN.md` (fill in Purpose, Progress, Validation, etc.).

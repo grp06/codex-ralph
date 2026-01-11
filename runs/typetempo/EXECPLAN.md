@@ -10,7 +10,9 @@ Users experience faster, smoother typing with fewer dropped frames or lag, visib
 ## Progress
 - [x] (2026-01-11) Audit repo and runtime behavior to identify performance bottlenecks and typing UX issues; capture baseline metrics and pain points.
 - [x] (2026-01-11) Draft a concrete improvement plan in this ExecPlan, including a checklist of specific fixes and tests to add.
-- [ ] (2026-01-11) Implement the highest-impact performance/typing fixes and add/expand tests per the checklist.
+- [x] (2026-01-11) Implement slice: memoize passage character rendering and add a unit test guarding against timer-driven recomputation.
+- [x] (2026-01-11) Implement slice: add IME composition handling with a unit test for keystroke counting.
+- [ ] (2026-01-11) Implement remaining performance/typing fixes and add/expand tests per the checklist.
 - [ ] (2026-01-11) Validate improvements with profiling + test suite; record results and update Outcomes & Retrospective.
 
 ## Surprises & Discoveries
@@ -22,11 +24,18 @@ Users experience faster, smoother typing with fewer dropped frames or lag, visib
   Evidence: `tests/unit/typing-metrics.test.ts`, `tests/unit/typing-locking.test.ts`, `tests/unit/typing-ritual-start.test.tsx`; no perf tooling or profiler notes in repo.
 - Observation: Unit test listing failed because Jest could not resolve the setup file even though it exists.
   Evidence: `npm run test:unit -- --listTests` -> "Module <rootDir>/jest.setup.ts in the setupFilesAfterEnv option was not found."
+- Observation: Jest runs fail before tests execute due to missing Next.js SWC bindings for linux/arm64.
+  Evidence: `npm run test:unit -- typing-ritual-memoization.test.tsx` -> "Failed to load SWC binary for linux/arm64".
+- Observation: Targeted unit test run still fails before execution due to missing Next.js SWC bindings for linux/arm64.
+  Evidence: `npm run test:unit -- typing-ritual-composition.test.tsx` -> "Failed to load SWC binary for linux/arm64".
 
 ## Decision Log
-- Decision:
-  Rationale:
-  Date/Author:
+- Decision: Memoize passage character rendering and add a unit test asserting timer ticks do not trigger recomputation.
+  Rationale: Reduces avoidable work on interval-driven renders while giving a regression guard for future changes.
+  Date/Author: 2026-01-11 / Codex
+- Decision: Defer keystroke counting for IME composition input until composition ends.
+  Rationale: Avoids double-counting intermediate composition updates while preserving typed text rendering.
+  Date/Author: 2026-01-11 / Codex
 
 ## Outcomes & Retrospective
 - Outcome:
@@ -53,7 +62,7 @@ Audit findings:
 - [ ] Performance: Memoize `passageCharacters` and other derived render data to avoid recomputing on each keystroke.
 - [ ] Performance: Replace 250ms timer `now` re-render cadence with RAF or time diff computed only when needed (or pause when idle).
 - [ ] Performance: Minimize per-keystroke state updates (batch keystrokes/typed text updates or move counters to refs with a debounced commit).
-- [ ] Typing UX: Handle composition events (IME) to avoid incorrect keystroke counts and ensure smooth input.
+- [x] Typing UX: Handle composition events (IME) to avoid incorrect keystroke counts and ensure smooth input.
 - [ ] Typing UX: Prevent focus loss/selection jumps when rendering spans or input updates during typing.
 - [ ] Tests: Add unit tests for memoized passage rendering and keystroke batching behavior.
 - [ ] Tests: Add integration test for IME composition path (mocked) and verify counts/locking remain correct.
