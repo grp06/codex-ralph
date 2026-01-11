@@ -8,7 +8,7 @@ Maintained according to: .agent/PLANS.md
 Create a single‑page website that markets an AI company building voice agents for roofing contractors. Success is a clean, on‑brand landing page with clear messaging, sections, and calls‑to‑action visible in a browser.
 
 ## Progress
-- [ ] (2026-01-11) Define scope details and file layout (stack, filenames, sections).
+- [x] (2026-01-11) Define scope details and file layout (stack, filenames, sections).
 - [ ] (2026-01-11) Generate the page structure (semantic HTML sections and layout skeleton).
 - [ ] (2026-01-11) Apply visual design (CSS, typography, color system, layout).
 - [ ] (2026-01-11) Write landing‑page copy (headlines, section copy, CTAs).
@@ -31,6 +31,7 @@ Create a single‑page website that markets an AI company building voice agents 
 - Repo currently contains loop scripts and docs only; no site files exist yet.
 - Stack: plain HTML/CSS with `index.html` and `styles.css` in repo root.
 - Target audience: roofing contractors evaluating AI voice agents.
+- Planned sections: hero, problem, solution, features, process, proof, FAQ, final CTA, footer.
 
 ## Plan of Work
 1) Confirm scope and constraints (minimal, simple HTML/CSS, file locations).
