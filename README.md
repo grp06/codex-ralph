@@ -20,6 +20,12 @@ It’s long-running because Ralph persists “working memory” into files and g
 ./init-project.sh /path/to/project
 ```
 
+Example config:
+
+```
+target_repo_path = "/Users/you/my-repo"
+```
+
 3) Edit the plan:
 
 ```

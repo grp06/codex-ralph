@@ -3,7 +3,7 @@
 
 ## Plan Authoring Mode (External Projects)
 If the user is requesting an ExecPlan for an external project, ignore the Ralph Loop Rules below. In this mode:
-- Ask for the target repo path if it is not provided in the config.
+- Ask for the target repo path if it is not provided in the config at ralph.config.toml
 - Read the target repo files to understand structure, build/test workflows, and constraints.
 - Write or update the external plan at `.agent/execplans/execplan.md` in the target repo.
 - Follow the target repo's `.agent/PLANS.md`.

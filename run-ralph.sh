@@ -26,8 +26,18 @@ read_config_value() {
   ' "$config_path"
 }
 
+expand_path() {
+  local path="$1"
+  if [[ "$path" == "~"* ]]; then
+    printf "%s" "${path/#\~/$HOME}"
+  else
+    printf "%s" "$path"
+  fi
+}
+
 if [[ "$#" -lt 1 ]]; then
   project_path="$(read_config_value "target_repo_path")"
+  project_path="$(expand_path "$project_path")"
   if [[ -z "${project_path:-}" ]]; then
     usage
     log_error "Missing project path. Pass it as an argument or set target_repo_path in ralph.config.toml."
