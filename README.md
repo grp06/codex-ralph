@@ -1,8 +1,8 @@
-# Ralph Loop (Codex ExecPlans)
+# codex-ralph
 
-Ralph turns Codex into a durable, long-running teammate: point it at any repo, give it a living ExecPlan, and let it chip away at the work safely and methodically.
+codex-ralph turns Codex into a durable, long-running teammate: point it at any repo, give it a living ExecPlan, and let it chip away at the work safely and methodically.
 
-It’s long-running because Ralph persists “working memory” into files and git, not the chat:
+It’s long-running because codex-ralph persists “working memory” into files and git, not the chat:
 - The ExecPlan (`.agent/execplans/execplan.md`) is the source of truth: Progress, decisions, discoveries, next steps, and validation commands live there and get updated every iteration.
 - Each loop iteration makes a small change, runs the plan’s validation, and commits—so the repo history becomes an audit log and a safe checkpoint/rollback mechanism.
 - The runner also saves per-iteration logs and the agent’s structured output under `runs/<project>/.ralph/`, so you can resume after interruptions and see what happened.
