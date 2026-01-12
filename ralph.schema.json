@@ -1,4 +1,5 @@
 {
+  "$comment": "Output schema for a single Ralph loop iteration response.",
   "type": "object",
   "properties": {
     "status": { "type": "string", "enum": ["IN_PROGRESS", "COMPLETE", "BLOCKED"] },

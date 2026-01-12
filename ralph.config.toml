@@ -1,1 +1,4 @@
+# Local defaults for the Ralph runner.
 model_reasoning_effort = "xhigh"
+# Optional: set a default target repo path to avoid passing it to scripts.
+target_repo_path = ""
