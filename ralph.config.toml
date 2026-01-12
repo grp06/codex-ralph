@@ -2,4 +2,4 @@
 model_reasoning_effort = "medium"
 # Optional: set a default target repo path to avoid passing it to scripts.
 # Example: target_repo_path = "/Users/you/my-repo"
-target_repo_path = "~/rabbit_trail_frontend"
+target_repo_path = ""

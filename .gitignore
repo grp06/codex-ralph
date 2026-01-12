@@ -1,2 +1,4 @@
 .ralph/
 runs/
+.agent/journal/
+.DS_Store
