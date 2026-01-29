@@ -47,3 +47,4 @@ target_repo_path = "/Users/you/my-repo"
 - Run commands from this repo root.
 - Logs and outputs go under `runs/<project>/.ralph/`.
 - All code changes and git commands run in the target repo.
+- The runner installs Node dependencies automatically when a lockfile is present. Set `RALPH_PREFLIGHT=0` to skip.

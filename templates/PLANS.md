@@ -51,6 +51,8 @@ Validation is not optional. Include instructions to run tests, to start the syst
 
 Capture evidence. When your steps produce terminal output, short diffs, or logs, include them inside the single fenced block as indented examples. Keep them concise and focused on what proves success. If you need to include a patch, prefer file-scoped diffs or small excerpts that a reader can recreate by following your instructions rather than pasting large blobs.
 
+Blockers must be recorded in the ExecPlan with the absolute run log directory and the specific log file used to diagnose the issue. For Ralph runs, the prompt includes the container path for logs, and may include a host path for humans; record both when available so a future agent can find the evidence quickly.
+
 ## Milestones
 
 Milestones are narrative, not bureaucracy. If you break the work into milestones, introduce each with a brief paragraph that describes the scope, what will exist at the end of the milestone that did not exist before, the commands to run, and the acceptance you expect to observe. Keep it readable as a story: goal, work, result, proof. Progress and milestones are distinct: milestones tell the story, progress tracks granular work. Both must exist. Never abbreviate a milestone merely for the sake of brevity, do not leave out details that could be crucial to a future implementation.
@@ -116,6 +118,7 @@ Summarize outcomes, gaps, and lessons learned at major milestones or at completi
 ## Context and Orientation
 
 Describe the current state relevant to this task as if the reader knows nothing. Name the key files and modules by full path. Define any non-obvious term you will use. Do not refer to prior plans.
+Include a Run Logs line with the absolute log directory path (container path, plus host path if the prompt provides it).
 
 ## Plan of Work
 
