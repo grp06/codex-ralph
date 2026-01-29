@@ -57,7 +57,6 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Keep logging helpers centralized and opt into color only for the long-running loop via `RALPH_LOG_COLOR`.
 - Resolve and validate target repo paths through a single shared helper to prevent drift across host entrypoints.
 - Centralize Docker preflight checks via `require_docker_env` to keep host entrypoints consistent.
-- Centralize the `docker compose run` invocation via `docker_compose_run` to keep host entrypoints consistent.
 - Centralize project path resolution in `resolve_project_path` to keep host entrypoints consistent.
 - Centralize Docker preflight + run via `docker_compose_run_checked` and non-run preflight via `docker_compose_checked` to keep entrypoints consistent.
 
