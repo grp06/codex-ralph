@@ -34,7 +34,7 @@ fi
 
 REASONING_EFFORT="medium"
 if [[ -f "$CONFIG_PATH" ]]; then
-  parsed_effort="$(awk -F= '/^[[:space:]]*model_reasoning_effort[[:space:]]*=/{print $2; exit}' "$CONFIG_PATH" | tr -d ' \"')"
+  parsed_effort="$(read_config_value "model_reasoning_effort" "$CONFIG_PATH")"
   if [[ -n "$parsed_effort" ]]; then
     REASONING_EFFORT="$parsed_effort"
   fi
