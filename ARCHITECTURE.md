@@ -16,7 +16,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Container entrypoint: `afk-ralph.sh` runs inside the container and invokes `codex exec` with the plan and schema.
 - Setup/auth: `authenticate-codex.sh` and `docker/codex-setup.sh` build the image and install/authenticate the Codex CLI.
 - Project initialization: `init-project.sh` seeds `.agent/PLANS.md` and `.agent/execplans/execplan.md` into a target repo.
-- Shared helpers: `scripts/lib.sh` provides logging, config parsing, path expansion, target repo resolution/validation, and Docker checks.
+- Shared helpers: `scripts/lib.sh` provides logging (including optional color), config parsing, path expansion, target repo resolution/validation, and Docker checks.
 - Dependency preflight: `scripts/preflight-deps.sh` installs JS dependencies in the target repo when needed.
 - Templates/config: `templates/PLANS.md`, `ralph.config.toml`, and `ralph.schema.json` define plan rules, defaults, and output schema.
 
@@ -33,7 +33,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Boundary: the target repo is mounted read/write; all code changes occur there, never in this runner repo.
 
 ## 6. Cross-Cutting Concerns
-- Logging: standardized `log_info`, `log_warn`, `log_error` in `scripts/lib.sh`.
+- Logging: standardized `log_info`, `log_warn`, `log_error`, `log_step`, and `log_success` in `scripts/lib.sh`, with optional ANSI color enabled via `RALPH_LOG_COLOR=1` when stdout is a TTY.
 - Error handling: `set -euo pipefail` in scripts; fail fast on missing requirements.
 - Configuration: `ralph.config.toml` read via `read_config_value`; path expansion via `expand_path`; target repo resolution via `resolve_target_repo`.
 - Caching: per-run caches under `runs/<project>/.ralph/` to reduce repeated installs.
@@ -53,6 +53,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Use Docker to keep Codex tooling isolated from host dependencies and ensure repeatability.
 - Treat `.agent/execplans/execplan.md` in the target repo as the single source of truth for work.
 - Centralize shared helpers in `scripts/lib.sh` to remove duplicate logic and keep behavior consistent.
+- Keep logging helpers centralized and opt into color only for the long-running loop via `RALPH_LOG_COLOR`.
 - Resolve and validate target repo paths through a single shared helper to prevent drift across host entrypoints.
 
 ## 10. Diagrams (Mermaid)
