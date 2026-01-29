@@ -1,42 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-log_info() { printf "[INFO] %s\n" "$*"; }
-log_error() { printf "[ERR] %s\n" "$*" >&2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/scripts/lib.sh"
 
 usage() {
   printf "Usage:\n  %s [project-path] [iterations]\n" "$0"
 }
 
-runner_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+runner_root="$SCRIPT_DIR"
 config_path="$runner_root/ralph.config.toml"
 
-read_config_value() {
-  local key="$1"
-  if [[ ! -f "$config_path" ]]; then
-    return 0
-  fi
-  awk -F= -v k="$key" '
-    $1 ~ "^[[:space:]]*" k "[[:space:]]*$" {
-      gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2)
-      gsub(/^\"|\"$/, "", $2)
-      print $2
-      exit
-    }
-  ' "$config_path"
-}
-
-expand_path() {
-  local path="$1"
-  if [[ "$path" == "~"* ]]; then
-    printf "%s" "${path/#\~/$HOME}"
-  else
-    printf "%s" "$path"
-  fi
-}
-
 if [[ "$#" -lt 1 ]]; then
-  project_path="$(read_config_value "target_repo_path")"
+  project_path="$(read_config_value "target_repo_path" "$config_path")"
   project_path="$(expand_path "$project_path")"
   if [[ -z "${project_path:-}" ]]; then
     usage
