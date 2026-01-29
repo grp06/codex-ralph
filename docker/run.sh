@@ -9,8 +9,7 @@ if [[ "$#" -eq 0 ]]; then
   exit 1
 fi
 
-require_docker
-require_docker_compose
+require_docker_env
 
 log_info "Running in Docker."
 docker compose run --rm -e RALPH_IN_DOCKER=1 ralph "$@"

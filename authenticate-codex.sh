@@ -4,8 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/scripts/lib.sh"
 
-require_docker
-require_docker_compose
+require_docker_env
 
 log_info "Building Docker image."
 docker compose build

@@ -17,16 +17,7 @@ if [[ "$#" -ge 1 ]]; then
   shift
 fi
 project_path="$(resolve_target_repo "$arg_path" "$config_path" usage)"
-
-if ! command -v docker >/dev/null 2>&1; then
-  log_error "Docker is required."
-  exit 1
-fi
-
-if ! docker compose version >/dev/null 2>&1; then
-  log_error "Docker Compose v2 is required (docker compose)."
-  exit 1
-fi
+require_docker_env
 
 project_abs="$(cd "$project_path" && pwd)"
 project_name="${RALPH_PROJECT_NAME:-$(basename "$project_abs")}"

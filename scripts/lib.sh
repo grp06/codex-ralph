@@ -94,3 +94,8 @@ require_docker_compose() {
     exit 1
   fi
 }
+
+require_docker_env() {
+  require_docker
+  require_docker_compose
+}
