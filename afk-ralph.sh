@@ -27,9 +27,8 @@ if [[ -n "$HOST_RUN_DIR" ]]; then
   HOST_LOG_DIR="$HOST_RUN_DIR/.ralph/logs"
 fi
 
-if [[ -n "${RALPH_CONFIG:-}" && ! -f "$CONFIG_PATH" ]]; then
-  log_error "Missing config: $CONFIG_PATH"
-  exit 1
+if [[ -n "${RALPH_CONFIG:-}" ]]; then
+  require_file "$CONFIG_PATH" "Missing config: $CONFIG_PATH"
 fi
 
 REASONING_EFFORT="medium"
@@ -48,20 +47,11 @@ case "$REASONING_EFFORT" in
     ;;
 esac
 
-if [[ ! -f "$PLAN_PATH" ]]; then
-  log_error "Missing plan: $PLAN_PATH"
-  exit 1
-fi
+require_file "$PLAN_PATH" "Missing plan: $PLAN_PATH"
 
-if [[ ! -f "$RULES_PATH" ]]; then
-  log_error "Missing rules: $RULES_PATH"
-  exit 1
-fi
+require_file "$RULES_PATH" "Missing rules: $RULES_PATH"
 
-if [[ ! -f "$SCHEMA_PATH" ]]; then
-  log_error "Missing schema: $SCHEMA_PATH"
-  exit 1
-fi
+require_file "$SCHEMA_PATH" "Missing schema: $SCHEMA_PATH"
 
 iters="${1:-}"
 if [[ -z "$iters" ]]; then

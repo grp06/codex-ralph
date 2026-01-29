@@ -25,6 +25,26 @@ log_success() { printf "%b[OK]%b %s\n" "$C_GREEN" "$C_RESET" "$*"; }
 log_warn() { printf "%b[WARN]%b %s\n" "$C_YELLOW" "$C_RESET" "$*"; }
 log_error() { printf "%b[ERR]%b %s\n" "$C_RED" "$C_RESET" "$*" >&2; }
 
+require_file() {
+  local path="$1"
+  local message="$2"
+  if [[ ! -f "$path" ]]; then
+    log_error "$message"
+    exit 1
+  fi
+}
+
+require_file_with_hint() {
+  local path="$1"
+  local message="$2"
+  local hint="$3"
+  if [[ ! -f "$path" ]]; then
+    log_error "$message"
+    log_error "$hint"
+    exit 1
+  fi
+}
+
 read_config_value() {
   local key="$1"
   local config_path="$2"
