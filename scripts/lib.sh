@@ -70,10 +70,11 @@ expand_path() {
   fi
 }
 
-resolve_target_repo() {
-  local arg_path="$1"
-  local config_path="$2"
+resolve_project_path() {
+  local runner_root="$1"
+  local arg_path="$2"
   local usage_fn="${3:-}"
+  local config_path="$runner_root/ralph.config.toml"
   local project_path="$arg_path"
 
   if [[ -z "${project_path:-}" ]]; then
@@ -99,15 +100,6 @@ resolve_target_repo() {
   fi
 
   printf "%s" "$project_path"
-}
-
-resolve_project_path() {
-  local runner_root="$1"
-  local arg_path="$2"
-  local usage_fn="${3:-}"
-  local config_path="$runner_root/ralph.config.toml"
-
-  resolve_target_repo "$arg_path" "$config_path" "$usage_fn"
 }
 
 require_docker() {
