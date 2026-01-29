@@ -27,7 +27,7 @@ Reduce duplicate Bash helper functions by consolidating logging, config parsing,
 
 ## Outcomes & Retrospective
 
-- Pending.
+Completed consolidation of shared helper functions into `scripts/lib.sh` and sourced them from the runner scripts. Validation included `bash -n` across all touched scripts, the `init-project.sh` smoke test, and a successful `./docker/run.sh true` run. No regressions were observed; no follow-up gaps are known.
 
 ## Context and Orientation
 
@@ -120,3 +120,5 @@ These edits are safe to re-apply. If a script fails after the refactor, recover 
 - `require_docker` and `require_docker_compose` for Docker checks.
 
 Scripts that source the library must compute their own `SCRIPT_DIR` (or equivalent) to locate `scripts/lib.sh` reliably when run from any working directory.
+
+Plan Update (2026-01-29 03:47Z): Marked all milestones complete, recorded validation transcripts, and summarized outcomes now that implementation and verification are finished.
