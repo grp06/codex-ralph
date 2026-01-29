@@ -26,8 +26,8 @@ plan_path="$project_abs/.agent/execplans/execplan.md"
 mkdir -p "$run_dir"
 mkdir -p "$run_dir/.ralph/logs"
 
-require_file_with_hint "$plans_path" "Missing target rules: $plans_path" "Run ./init-project.sh \"$project_abs\" first."
-require_file_with_hint "$plan_path" "Missing target plan: $plan_path" "Run ./init-project.sh \"$project_abs\" first."
+require_file "$plans_path" "Missing target rules: $plans_path" "Run ./init-project.sh \"$project_abs\" first."
+require_file "$plan_path" "Missing target plan: $plan_path" "Run ./init-project.sh \"$project_abs\" first."
 
 cmd=("/workspace/afk-ralph.sh")
 if [[ -n "${1:-}" ]]; then
