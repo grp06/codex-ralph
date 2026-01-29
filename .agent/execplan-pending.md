@@ -11,8 +11,8 @@ Reduce duplicate Bash helper functions by consolidating logging, config parsing,
 ## Progress
 
 - [x] (2026-01-29 03:47Z) Wire `scripts/lib.sh` into `run-ralph.sh` and `init-project.sh`, removing duplicated helpers and preserving behavior.
-- [ ] (2026-01-29 00:00Z) Wire `scripts/lib.sh` into `authenticate-codex.sh`, `docker/run.sh`, and `scripts/preflight-deps.sh`, removing duplicated logging and Docker checks.
-- [ ] (2026-01-29 00:00Z) Run validation commands and record results in this plan.
+- [x] (2026-01-29 03:47Z) Wire `scripts/lib.sh` into `authenticate-codex.sh`, `docker/run.sh`, and `scripts/preflight-deps.sh`, removing duplicated logging and Docker checks.
+- [x] (2026-01-29 03:47Z) Run validation commands and record results in this plan.
 
 ## Surprises & Discoveries
 
@@ -100,6 +100,15 @@ These edits are safe to re-apply. If a script fails after the refactor, recover 
     [INFO] Created /tmp/ralph-init-KMy7E4/.agent/PLANS.md
     [INFO] Created /tmp/ralph-init-KMy7E4/.agent/execplans/execplan.md
     [INFO] Edit the ExecPlan, then run ./run-ralph.sh "/tmp/ralph-init-KMy7E4"
+
+    bash -n authenticate-codex.sh docker/run.sh scripts/preflight-deps.sh
+    (no output; exit 0)
+
+    ./docker/run.sh true
+    [INFO] Running in Docker.
+
+    bash -n run-ralph.sh init-project.sh authenticate-codex.sh docker/run.sh scripts/preflight-deps.sh scripts/lib.sh
+    (no output; exit 0)
 
 ## Interfaces and Dependencies
 

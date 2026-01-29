@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-log_info() { printf "[INFO] %s\n" "$*"; }
-log_warn() { printf "[WARN] %s\n" "$*"; }
-log_error() { printf "[ERR] %s\n" "$*" >&2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib.sh"
 
 if [[ "$#" -lt 2 ]]; then
   log_error "Usage: preflight-deps.sh <target-dir> <run-dir>"
