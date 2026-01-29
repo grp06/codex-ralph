@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-log_info() { printf "[INFO] %s\n" "$*"; }
-log_error() { printf "[ERR] %s\n" "$*" >&2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../scripts/lib.sh"
 
 mkdir -p "$HOME"
 mkdir -p "$CODEX_HOME"
