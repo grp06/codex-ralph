@@ -45,7 +45,7 @@ if [[ -n "${1:-}" ]]; then
   cmd+=("$1")
 fi
 
-docker compose run --rm \
+docker_compose_run \
   -e RALPH_IN_DOCKER=1 \
   -e RALPH_PLAN="/work/.agent/execplans/execplan.md" \
   -e RALPH_RULES="/work/.agent/PLANS.md" \

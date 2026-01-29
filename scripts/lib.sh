@@ -99,3 +99,7 @@ require_docker_env() {
   require_docker
   require_docker_compose
 }
+
+docker_compose_run() {
+  docker compose run --rm "$@"
+}

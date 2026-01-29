@@ -12,4 +12,4 @@ fi
 require_docker_env
 
 log_info "Running in Docker."
-docker compose run --rm -e RALPH_IN_DOCKER=1 ralph "$@"
+docker_compose_run -e RALPH_IN_DOCKER=1 ralph "$@"

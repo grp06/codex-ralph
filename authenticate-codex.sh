@@ -10,4 +10,4 @@ log_info "Building Docker image."
 docker compose build
 
 log_info "Installing Codex CLI and authenticating."
-docker compose run --rm ralph /workspace/docker/codex-setup.sh
+docker_compose_run ralph /workspace/docker/codex-setup.sh
