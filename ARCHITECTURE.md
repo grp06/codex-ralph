@@ -16,7 +16,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Container entrypoint: `afk-ralph.sh` runs inside the container and invokes `codex exec` with the plan and schema.
 - Setup/auth: `authenticate-codex.sh` and `docker/codex-setup.sh` build the image and install/authenticate the Codex CLI.
 - Project initialization: `init-project.sh` seeds `.agent/PLANS.md` and `.agent/execplans/execplan.md` into a target repo.
-- Shared helpers: `scripts/lib.sh` provides logging (including optional color), config parsing, path expansion, target repo resolution/validation (including `resolve_project_path`), and Docker helpers (including `require_docker_env`, `docker_compose_run_checked`, and `docker_compose_checked`).
+- Shared helpers: `scripts/lib.sh` provides logging (including optional color), config parsing, path expansion, target repo resolution/validation (including `resolve_project_path`), and Docker helpers (including `require_docker_env` and `docker_compose_checked`).
 - Dependency preflight: `scripts/preflight-deps.sh` installs JS dependencies in the target repo when needed.
 - Templates/config: `templates/PLANS.md`, `ralph.config.toml`, and `ralph.schema.json` define plan rules, defaults, and output schema.
 
@@ -30,7 +30,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 ## 5. Data Flow and Boundaries
 - Host flow: user runs `run-ralph.sh` -> reads `ralph.config.toml` -> validates Docker -> starts container.
 - Container flow: `afk-ralph.sh` -> `codex exec` -> edits target repo mounted at `/work` -> writes logs and JSON output.
-- Host-to-container handoff: when `afk-ralph.sh` is invoked outside Docker, it uses `docker_compose_run_checked` to launch the container with `RALPH_IN_DOCKER=1`, then re-enters `afk-ralph.sh` inside the container.
+- Host-to-container handoff: when `afk-ralph.sh` is invoked outside Docker, it uses `docker_compose_checked run --rm` to launch the container with `RALPH_IN_DOCKER=1`, then re-enters `afk-ralph.sh` inside the container.
 - Boundary: the target repo is mounted read/write; all code changes occur there, never in this runner repo.
 
 ## 6. Cross-Cutting Concerns
@@ -58,7 +58,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Resolve and validate target repo paths through a single shared helper to prevent drift across host entrypoints.
 - Centralize Docker preflight checks via `require_docker_env` to keep host entrypoints consistent.
 - Centralize project path resolution in `resolve_project_path` to keep host entrypoints consistent.
-- Centralize Docker preflight + run via `docker_compose_run_checked` and non-run preflight via `docker_compose_checked` to keep entrypoints consistent.
+- Centralize Docker Compose preflight via `docker_compose_checked`, passing explicit subcommands like `run --rm` or `build` to keep entrypoints consistent.
 
 ## 10. Diagrams (Mermaid)
 ```mermaid

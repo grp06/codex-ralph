@@ -128,8 +128,3 @@ docker_compose_checked() {
   require_docker_env
   docker compose "$@"
 }
-
-docker_compose_run_checked() {
-  require_docker_env
-  docker compose run --rm "$@"
-}

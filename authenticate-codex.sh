@@ -8,4 +8,4 @@ log_info "Building Docker image."
 docker_compose_checked build
 
 log_info "Installing Codex CLI and authenticating."
-docker_compose_run_checked ralph /workspace/docker/codex-setup.sh
+docker_compose_checked run --rm ralph /workspace/docker/codex-setup.sh
