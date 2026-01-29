@@ -71,15 +71,6 @@ read_config_value() {
   ' "$config_path"
 }
 
-expand_path() {
-  local path="$1"
-  if [[ "$path" == "~"* ]]; then
-    printf "%s" "${path/#\~/$HOME}"
-  else
-    printf "%s" "$path"
-  fi
-}
-
 resolve_project_path() {
   local runner_root="$1"
   local arg_path="$2"
@@ -89,7 +80,9 @@ resolve_project_path() {
 
   if [[ -z "${project_path:-}" ]]; then
     project_path="$(read_config_value "target_repo_path" "$config_path")"
-    project_path="$(expand_path "$project_path")"
+    if [[ "$project_path" == "~"* ]]; then
+      project_path="${project_path/#\~/$HOME}"
+    fi
     if [[ -z "${project_path:-}" ]]; then
       if [[ -n "$usage_fn" ]]; then
         "$usage_fn"
