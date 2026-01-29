@@ -38,18 +38,11 @@ require_file() {
   fi
 }
 
-require_args() {
-  local min_args="$1"
-  local actual_args="$2"
-  local message="$3"
-  if [[ "$actual_args" -lt "$min_args" ]]; then
-    log_error "$message"
+preflight_deps() {
+  if [[ "$#" -lt 2 ]]; then
+    log_error "Usage: preflight-deps.sh <target-dir> <run-dir>"
     exit 1
   fi
-}
-
-preflight_deps() {
-  require_args 2 "$#" "Usage: preflight-deps.sh <target-dir> <run-dir>"
   local target_dir="$1"
   local run_dir="$2"
 

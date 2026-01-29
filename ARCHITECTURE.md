@@ -35,7 +35,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 
 ## 6. Cross-Cutting Concerns
 - Logging: standardized `log_info`, `log_warn`, `log_error`, `log_step`, and `log_success` in `scripts/lib.sh`, with optional ANSI color enabled via `RALPH_LOG_COLOR=1` when stdout is a TTY.
-- Error handling: `set -euo pipefail` in scripts; fail fast on missing requirements via shared `require_file` helper (supports optional hints), and on invalid argument counts via `require_args`.
+- Error handling: `set -euo pipefail` in scripts; fail fast on missing requirements via shared `require_file` helper (supports optional hints), and on invalid argument counts via inline checks in helpers like `preflight_deps`.
 - Configuration: `ralph.config.toml` read via `read_config_value` (including `model_reasoning_effort`); path expansion handled inside `resolve_project_path`; target repo resolution via `resolve_project_path`.
 - Caching: per-run caches under `runs/<project>/.ralph/` to reduce repeated installs.
 
