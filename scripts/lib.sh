@@ -105,26 +105,16 @@ resolve_project_path() {
   printf "%s" "$project_path"
 }
 
-require_docker() {
+docker_compose_checked() {
   if ! command -v docker >/dev/null 2>&1; then
     log_error "Docker is required."
     exit 1
   fi
-}
 
-require_docker_compose() {
   if ! docker compose version >/dev/null 2>&1; then
     log_error "Docker Compose v2 is required (docker compose)."
     exit 1
   fi
-}
 
-require_docker_env() {
-  require_docker
-  require_docker_compose
-}
-
-docker_compose_checked() {
-  require_docker_env
   docker compose "$@"
 }
