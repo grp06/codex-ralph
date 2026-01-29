@@ -9,13 +9,12 @@ usage() {
 }
 
 runner_root="$SCRIPT_DIR"
-config_path="$runner_root/ralph.config.toml"
 
 arg_path=""
 if [[ "$#" -ge 1 ]]; then
   arg_path="$1"
 fi
-project_path="$(resolve_target_repo "$arg_path" "$config_path" usage)"
+project_path="$(resolve_project_path "$runner_root" "$arg_path" usage)"
 
 project_abs="$(cd "$project_path" && pwd)"
 

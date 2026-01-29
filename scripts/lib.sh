@@ -81,6 +81,15 @@ resolve_target_repo() {
   printf "%s" "$project_path"
 }
 
+resolve_project_path() {
+  local runner_root="$1"
+  local arg_path="$2"
+  local usage_fn="${3:-}"
+  local config_path="$runner_root/ralph.config.toml"
+
+  resolve_target_repo "$arg_path" "$config_path" "$usage_fn"
+}
+
 require_docker() {
   if ! command -v docker >/dev/null 2>&1; then
     log_error "Docker is required."
