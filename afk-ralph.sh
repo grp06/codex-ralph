@@ -4,7 +4,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ -z "${RALPH_IN_DOCKER:-}" ]]; then
-  ./docker/run.sh ./afk-ralph.sh "$@"
+  source "$SCRIPT_DIR/scripts/lib.sh"
+  log_info "Running in Docker."
+  docker_compose_run_checked -e RALPH_IN_DOCKER=1 ralph ./afk-ralph.sh "$@"
   exit $?
 fi
 
