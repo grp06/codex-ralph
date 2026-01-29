@@ -16,7 +16,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Container entrypoint: `afk-ralph.sh` runs inside the container and invokes `codex exec` with the plan and schema.
 - Setup/auth: `authenticate-codex.sh` and `docker/codex-setup.sh` build the image and install/authenticate the Codex CLI.
 - Project initialization: `init-project.sh` seeds `.agent/PLANS.md` and `.agent/execplans/execplan.md` into a target repo.
-- Shared helpers: `scripts/lib.sh` provides logging (including optional color), config parsing, path expansion, target repo resolution/validation, and Docker checks.
+- Shared helpers: `scripts/lib.sh` provides logging (including optional color), config parsing, path expansion, target repo resolution/validation, and Docker checks (including the consolidated `require_docker_env` preflight).
 - Dependency preflight: `scripts/preflight-deps.sh` installs JS dependencies in the target repo when needed.
 - Templates/config: `templates/PLANS.md`, `ralph.config.toml`, and `ralph.schema.json` define plan rules, defaults, and output schema.
 
@@ -55,6 +55,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Centralize shared helpers in `scripts/lib.sh` to remove duplicate logic and keep behavior consistent.
 - Keep logging helpers centralized and opt into color only for the long-running loop via `RALPH_LOG_COLOR`.
 - Resolve and validate target repo paths through a single shared helper to prevent drift across host entrypoints.
+- Centralize Docker preflight checks via `require_docker_env` to keep host entrypoints consistent.
 
 ## 10. Diagrams (Mermaid)
 ```mermaid
