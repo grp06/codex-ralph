@@ -181,7 +181,7 @@ for ((i=1; ; i++)); do
   exec > >(tee -a "$log_file") 2>&1
   log_info "Logging to $log_file"
   if [[ "$PREFLIGHT" != "0" ]]; then
-    "$SCRIPT_DIR/scripts/preflight-deps.sh" "$TARGET_DIR" "$RUN_DIR"
+    preflight_deps "$TARGET_DIR" "$RUN_DIR"
   fi
   if [[ "$iters" == "forever" ]]; then
     log_step "Ralph iteration $i"

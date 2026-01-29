@@ -17,7 +17,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Setup/auth: `authenticate-codex.sh` and `docker/codex-setup.sh` build the image and install/authenticate the Codex CLI.
 - Project initialization: `init-project.sh` seeds `.agent/PLANS.md` and `.agent/execplans/execplan.md` into a target repo.
 - Shared helpers: `scripts/lib.sh` provides logging (including optional color), config parsing, path expansion, target repo resolution/validation (including `resolve_project_path`), and Docker helpers (including `docker_compose_checked`).
-- Dependency preflight: `scripts/preflight-deps.sh` installs JS dependencies in the target repo when needed.
+- Dependency preflight: `scripts/lib.sh` exposes `preflight_deps` to install JS dependencies in the target repo when needed.
 - Templates/config: `templates/PLANS.md`, `ralph.config.toml`, and `ralph.schema.json` define plan rules, defaults, and output schema.
 
 ## 4. Directory Layout
