@@ -11,28 +11,12 @@ usage() {
 runner_root="$SCRIPT_DIR"
 config_path="$runner_root/ralph.config.toml"
 
-if [[ "$#" -lt 1 ]]; then
-  project_path="$(read_config_value "target_repo_path" "$config_path")"
-  project_path="$(expand_path "$project_path")"
-  if [[ -z "${project_path:-}" ]]; then
-    usage
-    log_error "Missing project path. Pass it as an argument or set target_repo_path in ralph.config.toml."
-    exit 1
-  fi
-else
-  project_path="$1"
+arg_path=""
+if [[ "$#" -ge 1 ]]; then
+  arg_path="$1"
   shift
 fi
-
-if [[ ! -d "$project_path" ]]; then
-  log_error "Project path does not exist: $project_path"
-  exit 1
-fi
-
-if [[ ! -d "$project_path/.git" ]]; then
-  log_error "Target project must be a git repo."
-  exit 1
-fi
+project_path="$(resolve_target_repo "$arg_path" "$config_path" usage)"
 
 if ! command -v docker >/dev/null 2>&1; then
   log_error "Docker is required."
