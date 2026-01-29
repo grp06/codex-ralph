@@ -16,7 +16,6 @@ if [[ "$#" -ge 1 ]]; then
   shift
 fi
 project_path="$(resolve_project_path "$runner_root" "$arg_path" usage)"
-require_docker_env
 
 project_abs="$(cd "$project_path" && pwd)"
 project_name="${RALPH_PROJECT_NAME:-$(basename "$project_abs")}"
@@ -44,7 +43,7 @@ if [[ -n "${1:-}" ]]; then
   cmd+=("$1")
 fi
 
-docker_compose_run \
+docker_compose_run_checked \
   -e RALPH_IN_DOCKER=1 \
   -e RALPH_PLAN="/work/.agent/execplans/execplan.md" \
   -e RALPH_RULES="/work/.agent/PLANS.md" \
