@@ -45,6 +45,16 @@ require_file_with_hint() {
   fi
 }
 
+require_args() {
+  local min_args="$1"
+  local actual_args="$2"
+  local message="$3"
+  if [[ "$actual_args" -lt "$min_args" ]]; then
+    log_error "$message"
+    exit 1
+  fi
+}
+
 read_config_value() {
   local key="$1"
   local config_path="$2"

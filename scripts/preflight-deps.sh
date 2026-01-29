@@ -4,10 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib.sh"
 
-if [[ "$#" -lt 2 ]]; then
-  log_error "Usage: preflight-deps.sh <target-dir> <run-dir>"
-  exit 1
-fi
+require_args 2 "$#" "Usage: preflight-deps.sh <target-dir> <run-dir>"
 
 target_dir="$1"
 run_dir="$2"
