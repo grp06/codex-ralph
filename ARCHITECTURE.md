@@ -21,7 +21,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 - Templates/config: `templates/PLANS.md`, `ralph.config.toml`, and `ralph.schema.json` define plan rules, defaults, and output schema.
 
 ## 4. Directory Layout
-- `docker/`: container entry scripts and Codex CLI setup.
+- `docker/`: container setup scripts and Codex CLI setup.
 - `scripts/`: shared helper library and preflight tooling.
 - `templates/`: plan rules template copied into target repos.
 - `runs/`: per-project logs and structured outputs.
@@ -30,6 +30,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 ## 5. Data Flow and Boundaries
 - Host flow: user runs `run-ralph.sh` -> reads `ralph.config.toml` -> validates Docker -> starts container.
 - Container flow: `afk-ralph.sh` -> `codex exec` -> edits target repo mounted at `/work` -> writes logs and JSON output.
+- Host-to-container handoff: when `afk-ralph.sh` is invoked outside Docker, it uses `docker_compose_run_checked` to launch the container with `RALPH_IN_DOCKER=1`, then re-enters `afk-ralph.sh` inside the container.
 - Boundary: the target repo is mounted read/write; all code changes occur there, never in this runner repo.
 
 ## 6. Cross-Cutting Concerns
