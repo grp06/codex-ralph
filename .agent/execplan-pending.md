@@ -11,7 +11,7 @@ Today there are two ways to start the container loop: the intended host entrypoi
 ## Progress
 
 - [x] (2026-02-02T22:55Z) Remove the host fallback in `afk-ralph.sh` and add a fail-fast guard that directs users to `run-ralph.sh`.
-- [ ] (2026-02-02 00:00Z) Update documentation to describe the single host entrypoint and remove references to the old handoff path.
+- [x] (2026-02-02T22:55Z) Update documentation to describe the single host entrypoint and remove references to the old handoff path.
 - [ ] (2026-02-02 00:00Z) Run verification commands and record evidence.
 
 ## Surprises & Discoveries
@@ -27,8 +27,8 @@ Today there are two ways to start the container loop: the intended host entrypoi
 
 ## Outcomes & Retrospective
 
-- Outcome: `afk-ralph.sh` now fails fast on the host and only runs inside the container.
-- What remains: Update documentation and record verification evidence.
+- Outcome: `afk-ralph.sh` now fails fast on the host, and `ARCHITECTURE.md` reflects the single host entrypoint.
+- What remains: Record verification evidence.
 - Lessons: Not yet captured.
 
 ## Context and Orientation
@@ -101,4 +101,4 @@ No verification transcripts recorded yet.
 
 No new dependencies are introduced. Continue using `scripts/lib.sh` logging helpers, especially `log_error`, and keep `run-ralph.sh` as the sole host entrypoint.
 
-Plan Update Note (2026-02-02T22:55Z): Marked milestone 1 complete after adding the container-only guard to `afk-ralph.sh`.
+Plan Update Note (2026-02-02T22:55Z): Marked milestone 2 complete after updating `ARCHITECTURE.md` for the single entrypoint.

@@ -30,7 +30,7 @@ Assumptions: The system is used locally with Docker installed and a target repos
 ## 5. Data Flow and Boundaries
 - Host flow: user runs `run-ralph.sh` -> reads `ralph.config.toml` -> validates Docker -> starts container.
 - Container flow: `afk-ralph.sh` -> `codex exec` -> edits target repo mounted at `/work` -> writes logs and JSON output.
-- Host-to-container handoff: when `afk-ralph.sh` is invoked outside Docker, it uses `docker_compose_checked run --rm` to launch the container with `RALPH_IN_DOCKER=1`, then re-enters `afk-ralph.sh` inside the container.
+- Host-to-container handoff: `run-ralph.sh` is the only host entrypoint; it launches the `ralph` container with the full `RALPH_*` environment. `afk-ralph.sh` runs only inside the container.
 - Boundary: the target repo is mounted read/write; all code changes occur there, never in this runner repo.
 
 ## 6. Cross-Cutting Concerns
