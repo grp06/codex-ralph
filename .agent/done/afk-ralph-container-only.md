@@ -12,7 +12,7 @@ Today there are two ways to start the container loop: the intended host entrypoi
 
 - [x] (2026-02-02T22:55Z) Remove the host fallback in `afk-ralph.sh` and add a fail-fast guard that directs users to `run-ralph.sh`.
 - [x] (2026-02-02T22:55Z) Update documentation to describe the single host entrypoint and remove references to the old handoff path.
-- [ ] (2026-02-02 00:00Z) Run verification commands and record evidence.
+- [x] (2026-02-02T22:55Z) Run verification commands and record evidence.
 
 ## Surprises & Discoveries
 
@@ -27,9 +27,9 @@ Today there are two ways to start the container loop: the intended host entrypoi
 
 ## Outcomes & Retrospective
 
-- Outcome: `afk-ralph.sh` now fails fast on the host, and `ARCHITECTURE.md` reflects the single host entrypoint.
-- What remains: Record verification evidence.
-- Lessons: Not yet captured.
+- Outcome: `afk-ralph.sh` is container-only, the host fallback is removed, and `ARCHITECTURE.md` documents the single host entrypoint.
+- What remains: Nothing for this plan.
+- Lessons: Hidden entrypoints create drift; keep a single, documented host entrypoint.
 
 ## Context and Orientation
 
@@ -95,10 +95,20 @@ Re-running the edits is safe; the guard in `afk-ralph.sh` will remain a simple c
 
 ## Artifacts and Notes
 
-No verification transcripts recorded yet.
+Verification transcripts:
+
+    $ bash -n afk-ralph.sh
+    $ ./afk-ralph.sh
+    [ERR] afk-ralph.sh must be run inside Docker. Use ./run-ralph.sh <project-path>.
+    $ rg -n "afk-ralph" ARCHITECTURE.md
+    16:- Container entrypoint: `afk-ralph.sh` runs inside the container and invokes `codex exec` with the plan and schema.
+    28:- Root scripts: `run-ralph.sh`, `afk-ralph.sh`, `init-project.sh`, `authenticate-codex.sh`.
+    32:- Container flow: `afk-ralph.sh` -> `codex exec` -> edits target repo mounted at `/work` -> writes logs and JSON output.
+    33:- Host-to-container handoff: `run-ralph.sh` is the only host entrypoint; it launches the `ralph` container with the full `RALPH_*` environment. `afk-ralph.sh` runs only inside the container.
+    67:  Docker --> Container[afk-ralph.sh]
 
 ## Interfaces and Dependencies
 
 No new dependencies are introduced. Continue using `scripts/lib.sh` logging helpers, especially `log_error`, and keep `run-ralph.sh` as the sole host entrypoint.
 
-Plan Update Note (2026-02-02T22:55Z): Marked milestone 2 complete after updating `ARCHITECTURE.md` for the single entrypoint.
+Plan Update Note (2026-02-02T22:55Z): Marked milestone 3 complete and recorded verification evidence after running the host checks.
