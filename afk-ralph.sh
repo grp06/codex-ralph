@@ -5,9 +5,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ -z "${RALPH_IN_DOCKER:-}" ]]; then
   source "$SCRIPT_DIR/scripts/lib.sh"
-  log_info "Running in Docker."
-  docker_compose_checked run --rm -e RALPH_IN_DOCKER=1 ralph ./afk-ralph.sh "$@"
-  exit $?
+  log_error "afk-ralph.sh must be run inside Docker. Use ./run-ralph.sh <project-path>."
+  exit 1
 fi
 
 : "${RALPH_LOG_COLOR:=1}"
